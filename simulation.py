@@ -11,13 +11,39 @@ from plotly.subplots import make_subplots
 from plotly.offline import init_notebook_mode
 init_notebook_mode(connected=True)
 
+#def renderAB(systemA,systemB,couplingA,couplingB,stabilizerA,stabilizerB,stateA0,stateB0,time=5,delTime=.1,plot=True):
+    """
+        rendering dynamics of the system for publication usage, using matplot
+    """
+
+def evolveAB(systemA,systemB,couplingA,couplingB,stabilizerA,stabilizerB,stateA0,stateB0,time=5,delTime=.1,plot=True):
+    """
+        displaying dynamics of the system for notebook usage, using plotly
+    """
+    timeline = numpy.arange(0.0, time, delTime)
+    dimA,dimB = len(stateA0),len(stateB0)
+    def interaction(state,t):
+        stateA,stateB = state[:dimA],state[dimA:]
+        flowA = systemA(stateA,t) + couplingA(stateA,stateB,t) + stabilizerA(stateA,stateB,t)
+        flowB = systemB(stateA,t) + couplingB(stateA,stateB,t) + stabilizerB(stateA,stateB,t)
+        flow = numpy.concatenate(flowA,flowB)
+        return flow
+    state0 = numpy.concatenate(stateA0,stateB0)
+    state = odeint(interaction, state0, timeline, rtol=1.49012e-10, atol=1.49012e-10)
+    stateA,stateB = state[:dimA],state[dimA:]
+    if plot:
+        traceA = go.Scatter3d(x=stateA[:,0],y=stateA[:,1],z=stateA[:,2],mode='lines')
+        traceB = go.Scatter3d(x=stateB[:,0],y=stateB[:,1],z=stateB[:,2],mode='lines')
+        py.iplot([traceA,traceB])
+    return stateA,stateB
+
 def evolveSystem3(system,state0,time=5,delTime=.1,plot=True):
     timeline = numpy.arange(0.0, time, delTime)
     state = odeint(system, state0, timeline, rtol=1.49012e-10, atol=1.49012e-10)
     if plot:
         trace = go.Scatter3d(x=state[:,0],y=state[:,1],z=state[:,2],mode='lines')
         py.iplot([trace])
-        
+
 def evolveSystem2(system,state0,time=5,delTime=.1,plot=True):
     timeline = numpy.arange(0.0, time, delTime)
     state = odeint(system, state0, timeline, rtol=1.49012e-10, atol=1.49012e-10)
