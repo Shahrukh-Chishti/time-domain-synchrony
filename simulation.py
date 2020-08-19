@@ -12,9 +12,9 @@ from plotly.offline import init_notebook_mode
 init_notebook_mode(connected=True)
 
 #def renderAB(systemA,systemB,couplingA,couplingB,stabilizerA,stabilizerB,stateA0,stateB0,time=5,delTime=.1,plot=True):
-    """
-        rendering dynamics of the system for publication usage, using matplot
-    """
+#    """
+#        rendering dynamics of the system for publication usage, using matplot
+#    """
 
 def evolveAB(systemA,systemB,couplingA,couplingB,stabilizerA,stabilizerB,stateA0,stateB0,time=5,delTime=.1,plot=True):
     """
