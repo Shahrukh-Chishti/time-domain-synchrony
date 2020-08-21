@@ -39,7 +39,7 @@ def evolveAB(systemA,systemB,stateA0,stateB0,couplingA=null,couplingB=null,stabi
     def interaction(state,t):
         stateA,stateB = state[:dimA],state[dimA:]
         flowA = systemA(stateA,t) + couplingA(stateA,stateB,t) + stabilizerA(stateA,stateB,t)
-        flowB = systemB(stateA,t) + couplingB(stateA,stateB,t) + stabilizerB(stateA,stateB,t)
+        flowB = systemB(stateB,t) + couplingB(stateA,stateB,t) + stabilizerB(stateA,stateB,t)
         flow = numpy.concatenate((flowA,flowB))
         return flow
     state0 = numpy.concatenate((stateA0,stateB0))
@@ -47,7 +47,7 @@ def evolveAB(systemA,systemB,stateA0,stateB0,couplingA=null,couplingB=null,stabi
     stateA,stateB = state[:,:dimA],state[:,dimA:]
     if plot:
         traceA = tracingDynamics(stateA)
-        traceB = tracingDynamics(stateA)
+        traceB = tracingDynamics(stateB)
         py.iplot([traceA,traceB])
     return stateA,stateB
 
