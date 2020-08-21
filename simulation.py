@@ -1,4 +1,6 @@
 import numpy
+from numpy import *
+from sympy import *
 from numpy.random import random,rand
 from scipy.integrate import odeint
 import sys
@@ -10,6 +12,15 @@ import matplotlib.animation as animation
 from plotly.subplots import make_subplots
 from plotly.offline import init_notebook_mode
 init_notebook_mode(connected=True)
+
+def VectorDivergence(vector,variables):
+    D = []
+    for vec in vector:
+        row = []
+        for var in variables:
+            row.append(diff(vec,var))
+        D.append(row)
+    return Matrix(D)
 
 #def renderAB(systemA,systemB,couplingA,couplingB,stabilizerA,stabilizerB,stateA0,stateB0,time=5,delTime=.1,plot=True):
 #    """
