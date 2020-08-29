@@ -30,7 +30,7 @@ def VectorDivergence(vector,variables):
 def null(A,B,t):
     return 0
 
-def evolveAB(systemA,systemB,stateA0,stateB0,couplingA=null,couplingB=null,stabilizerA=null,stabilizerB=null,time=5,delTime=.1,plot=True):
+def evolveAB(systemA,systemB,stateA0,stateB0,couplingA=null,couplingB=null,stabilizerA=null,stabilizerB=null,time=5,delTime=.1,tail=0,plot=True):
     """
         displaying dynamics of the system for notebook usage, using plotly
     """
@@ -44,6 +44,7 @@ def evolveAB(systemA,systemB,stateA0,stateB0,couplingA=null,couplingB=null,stabi
         return flow
     state0 = numpy.concatenate((stateA0,stateB0))
     state = odeint(interaction, state0, timeline, rtol=1.49012e-10, atol=1.49012e-10)
+    state = state[-tail:]
     stateA,stateB = state[:,:dimA],state[:,dimA:]
     if plot:
         traceA = tracingDynamics(stateA)
