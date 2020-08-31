@@ -30,11 +30,14 @@ def VectorDivergence(vector,variables):
 def null(A,B,t):
     return 0
 
-def evolveAB(systemA,systemB,stateA0,stateB0,couplingA=null,couplingB=null,stabilizerA=null,stabilizerB=null,time=5,delTime=.1,tail=0,plot=True):
+def evolveAB(systemA,systemB,stateA0,stateB0,couplingA=null,couplingB=null,stabilizerA=null,stabilizerB=null,time=5,delTime=None,tail=0,plot=True):
     """
         displaying dynamics of the system for notebook usage, using plotly
     """
-    timeline = numpy.arange(0.0, time, delTime)
+    if delTime is None:
+        timeline = time
+    else:
+        timeline = numpy.arange(0.0, time, delTime)
     dimA,dimB = len(stateA0),len(stateB0)
     def interaction(state,t):
         stateA,stateB = state[:dimA],state[dimA:]
@@ -67,6 +70,7 @@ def evolveSystem3(system,state0,time=5,delTime=.1,plot=True):
     if plot:
         trace = go.Scatter3d(x=state[:,0],y=state[:,1],z=state[:,2],mode='lines')
         py.iplot([trace])
+    return state
 
 def evolveSystem2(system,state0,time=5,delTime=.1,plot=True):
     timeline = numpy.arange(0.0, time, delTime)
@@ -74,3 +78,4 @@ def evolveSystem2(system,state0,time=5,delTime=.1,plot=True):
     if plot:
         trace = go.Scatter(x=state[:,0],y=state[:,1],mode='lines')
         py.iplot([trace])
+    return state
