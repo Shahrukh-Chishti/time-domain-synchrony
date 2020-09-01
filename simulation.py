@@ -27,6 +27,27 @@ def VectorDivergence(vector,variables):
 #        rendering dynamics of the system for publication usage, using matplot
 #    """
 
+def syncError(truth,slave):
+    error = truth - slave
+    error = error**2
+    return error
+
+def dropna(array):
+    array = array[~isnan(array)]
+    return array
+
+def lagMinimaSyncError(truth,slave,lags=10):
+    lags = numpy.arange(-lags,lags,1,int)
+    error = []
+    for index,lag in enumerate(lags):
+        err = syncError(truth,slave.shift(lag))
+        err = dropna(err.sum(axis=1)).mean()
+        error.append(err)
+    index = argmin(error)
+    min_err = error[index]
+    min_lag = lags[index]
+    return min_err,min_lag
+
 def null(A,B,t):
     return 0
 
